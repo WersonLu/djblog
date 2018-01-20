@@ -15,8 +15,9 @@ from django.conf.urls import url
 
 from . import views
 
-
 # 网址和处理函数的关系
 urlpatterns = [
-    url(r'^$', views.index, name='index')
+    url(r'^$', views.index, name='index'),
+    # 每一个页面对应一个url处理器
+    url(r'^post/(?P<pk>[0-9]+)/$', views.detail, name='detail')
 ]

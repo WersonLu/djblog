@@ -6,6 +6,8 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import User
 
+from django.core.urlresolvers import reverse
+
 
 # 创建文章,标签等模型
 class Category(models.Model):
@@ -73,3 +75,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('blog:detail', kwargs={'pk': self.pk})
