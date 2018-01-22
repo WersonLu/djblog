@@ -2,25 +2,128 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from django.http import HttpResponse
+import markdown
 from django.shortcuts import render, get_object_or_404
-from .models import Post
+from .models import Post, Category, Tag
+
+# 改写类视图函数
+from django.views.generic import ListView, DetailView
 
 
 # request 是django封装好的http请求,返回一个http响应给用户
-def index(request):
-    # return HttpResponse("欢迎")
-    # 以时间倒序查询文章,存在变量里
-    post_list = Post.objects.all().order_by('-created_time')
-    # return render(request, 'blog/index.html', context={
-    #     'title': '我的博客',
-    #     'welcome': '欢迎光临'
-    # })
-    return render(request, 'blog/index.html', context={
-        'post_list': post_list
-    })
+class IndexView(ListView):
+    # 我要获取的模型是post
+    model = Post
+    template_name = 'blog/index.html'
+    # 这个变量会传递给模板
+    context_object_name = 'post_list'
+    paginate_by = 3
+
+
+# def index(request):
+#     # return HttpResponse("欢迎")
+#     # 以时间倒序查询文章,存在变量里
+#     post_list = Post.objects.all().order_by('-created_time')
+#     # return render(request, 'blog/index.html', context={
+#     #     'title': '我的博客',
+#     #     'welcome': '欢迎光临'
+#     # })
+#     # post_list=Post.objects.filter(created_time__year=year,
+#     #                               created_time__month=month).order_by('-created_time')
+#
+#     return render(request, 'blog/index.html', context={
+#         'post_list': post_list
+#     })
+
+
+def archives(request, year, month):
+    post_list = Post.objects.filter(created_time__year=year,
+                                    created_time__month=month).order_by('-created_time')
+    return render(request, 'blog/index.html', context={'post_list': post_list})
+
+
+#
+# class ArchivesView(ListView):
+#     model = Post
+#     template_name = 'blog/index.html'
+#     context_object_name = 'post_list'
+#
+#     def get_queryset(self):
+#         year = self.kwargs.get('year')
+#         month = self.kwargs.get('month')
+#         return super(ArchivesView, self).get_queryset().filter(created_time__year=year,
+#                                                                created_time__month=month)
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/detail.html'
+    context_object_name = 'post'
+
+    def get(self, request, *args, **kwargs):
+        response = super(PostDetailView, self).get(request, *args, **kwargs)
+
+        self.object.increase_views()
+        return response
+
+    def get_object(self, queryset=None):
+        post = super(PostDetailView, self).get_object(queryset=None)
+        md = markdown.markdown(
+            extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+                'markdown.extensions.toc',
+            ])
+        post.body = md.convert(post.body)
+        post.toc = md.toc
+
+        return post
+
+    # 显示评论数据的方法
+    def get_context_data(self, **kwargs):
+        context = super(PostDetailView, self).get_context_data(**kwargs)
+        # form=
+
+        return context
 
 
 def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/detail.index', context={'post': post})
+
+    # 每次触发detail函数,就调用阅读增加方法
+    post.increase_views()
+    # markdown 语法拓展
+    post.body = markdown.markdown(post.body,
+                                  extensions=[
+                                      'markdown.extensions.extra',
+                                      'markdown.extensions.codehilite',
+                                      'markdown.extensions.toc',
+                                  ])
+    # form=CommentForm()
+    return render(request, 'blog/detail.html', context={'post': post})
+
+
+class CategoryView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'post_list'
+
+    def get_queryset(self):
+        cate = get_object_or_404(Category, pk=self.kwargs.get('pk'))
+        return super(CategoryView, self).get_queryset().filter(category=cate)
+
+
+def category(request, pk):
+    # 记得在开始部分导入 Category 类
+    cate = get_object_or_404(Category, pk=pk)
+    post_list = Post.objects.filter(category=cate).order_by('-created_time')
+    return render(request, 'blog/index.html', context={'post_list': post_list})
+
+
+class TagView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'post_list'
+
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, pk=self.kwargs.get('pk'))
+        return super(TagView, self).get_queryset().filter(tags=tag)

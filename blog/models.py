@@ -2,11 +2,12 @@ from django.db import models
 
 # Create your models here.
 # blog/models.py
-
+import markdown
 from django.db import models
 from django.contrib.auth.models import User
-
-from django.core.urlresolvers import reverse
+from django.utils.html import strip_tags
+# from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 # 创建文章,标签等模型
@@ -57,6 +58,17 @@ class Post(models.Model):
     # 指定 CharField 的 blank=True 参数值后就可以允许空值了。
     excerpt = models.CharField(max_length=200, blank=True)
 
+    # 使用摘要还有第二种方法  truncatechares模板过滤器
+    def save(self, *args, **kwargs):
+        # 如果没有摘要,从文本主题截取54个字符赋给excerpt
+        if not self.excerpt:
+            md = markdown.Markdown(extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+            ])
+            self.excerpt = strip_tags(md.convert(self.body))[:54]
+        super(Post, self).save(*args, **kwargs)
+
     # 这是分类与标签，分类与标签的模型我们已经定义在上面。
     # 我们在这里把文章对应的数据库表和分类、标签对应的数据库表关联了起来，但是关联形式稍微有点不同。
     # 我们规定一篇文章只能对应一个分类，但是一个分类下可以有多篇文章，所以我们使用的是 ForeignKey，即一对多的关联关系。
@@ -66,7 +78,7 @@ class Post(models.Model):
     # https://docs.djangoproject.com/en/1.10/topics/db/models/#relationships
     category = models.ForeignKey(Category)
     tags = models.ManyToManyField(Tag, blank=True)
-
+    views = models.PositiveIntegerField(default=0)
     # 文章作者，这里 User 是从 django.contrib.auth.models 导入的。
     # django.contrib.auth 是 Django 内置的应用，专门用于处理网站用户的注册、登录等流程，User 是 Django 为我们已经写好的用户模型。
     # 这里我们通过 ForeignKey 把文章和 User 关联了起来。
@@ -78,3 +90,32 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'pk': self.pk})
+
+    # 排序属性
+    class Meta:
+        ordering = ['-created_time']
+
+    # 增加文章阅读数的方法
+    def increase_views(self):
+        self.views += 1
+        self.save(update_fields=['views'])
+
+
+# 储存评论
+class Comment(models.Model):
+    # 哪篇文章的评论
+    post = models.ForeignKey(Post, related_name='comments')
+    # 评论人的名字
+    name = models.CharField(max_length=80)
+    # 评论人邮箱
+    email = models.EmailField()
+    # 评论内容
+    body = models.TextField()
+    # 评论时间
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created']
+
+    def __str__(self):
+        return 'Comment by {} on {}'.format(self.name, self.post)

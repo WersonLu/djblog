@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 
 from django.contrib import admin
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, Comment
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -12,6 +12,16 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ('title', 'body')
 
 
-admin.site.register(Post,PostAdmin)
+admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
 admin.site.register(Tag)
+
+
+#  后台的评论管理器
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'post', 'created')
+    # list_filter = ()
+    search_fields = ('name', 'email', 'body')
+
+
+admin.site.register(Comment, CommentAdmin)
