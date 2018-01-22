@@ -12,10 +12,11 @@
  
 '''
 from .models import Comment
+from django import forms
 
 
-class CommentForm():
+class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         # 用户填写的三个字段
-        fields = ('name', 'email', 'body')
+        fields = ('name', 'email', 'url', 'text')

@@ -101,21 +101,21 @@ class Post(models.Model):
         self.save(update_fields=['views'])
 
 
-# 储存评论
-class Comment(models.Model):
-    # 哪篇文章的评论
-    post = models.ForeignKey(Post, related_name='comments')
-    # 评论人的名字
-    name = models.CharField(max_length=80)
-    # 评论人邮箱
-    email = models.EmailField()
-    # 评论内容
-    body = models.TextField()
-    # 评论时间
-    created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['created']
-
-    def __str__(self):
-        return 'Comment by {} on {}'.format(self.name, self.post)
+# # 储存评论
+# class Comment(models.Model):
+#     # 哪篇文章的评论
+#     post = models.ForeignKey(Post, related_name='comments')
+#     # 评论人的名字
+#     name = models.CharField(max_length=80)
+#     # 评论人邮箱
+#     email = models.EmailField()
+#     # 评论内容
+#     body = models.TextField()
+#     # 评论时间
+#     created = models.DateTimeField(auto_now_add=True)
+#
+#     class Meta:
+#         ordering = ['created']
+#
+#     def __str__(self):
+#         return 'Comment by {} on {}'.format(self.name, self.post)
