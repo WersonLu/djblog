@@ -38,7 +38,13 @@ INSTALLED_APPS = (
     'blog',
     'haystack',
     'comments',
+    'rest_framework',
 )
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
