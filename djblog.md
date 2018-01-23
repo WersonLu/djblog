@@ -1,1 +1,0 @@
-新手通过学习django by example 和网上教程,搭建博客
