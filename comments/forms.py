@@ -18,5 +18,5 @@ from django import forms
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        # 用户填写的三个字段
-        fields = ('name', 'email', 'url', 'text')
+        # 用户填写的字段
+        fields = ['name', 'email', 'url', 'text']

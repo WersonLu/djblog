@@ -40,3 +40,4 @@ def post_comment(request, post_pk):
             return render(request, 'blog/detail.html', context=context)
     # 重定向,调用get_absolute_url返回绝对路径
     return redirect(post)
+

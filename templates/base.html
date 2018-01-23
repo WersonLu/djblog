@@ -25,6 +25,7 @@
         span.highlighted{
             color: red;
         }
+
     </style>
 </head>
 
@@ -34,9 +35,13 @@
         <div class="row">
             <div class="col-md-4 col-sm-5 col-xs-8">
                 <div class="logo">
-                    <h1><a href="#"><b>Black</b> &amp; White</a></h1>
+                    <h1><a href="{% url 'blog:index' %}"><b>Wersonliu</b></a></h1>
                 </div>
+
             </div><!-- col-md-4 -->
+{#            <div class="col-md-4 col-sm-7 col-xs-4">#}
+{#                <p class="slogan">a old men</p>#}
+{#            </div>#}
             <div class="col-md-8 col-sm-7 col-xs-4">
                 <nav class="main-nav" role="navigation">
                     <div class="navbar-header">
@@ -48,8 +53,8 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
                             <li class="cl-effect-11"><a href="{% url 'blog:index' %}" data-hover="首页">首页</a></li>
-                            <li class="cl-effect-11"><a href="{% url 'blog:index' %}" data-hover="博客">博客</a></li>
-                            <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>
+{#                            <li class="cl-effect-11"><a href="{% url 'blog:index' %}" data-hover="博客">博客</a></li>#}
+{#                            <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>#}
                             <li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>
                         </ul>
                     </div><!-- /.navbar-collapse -->
@@ -147,9 +152,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <p class="copyright">&copy 2017 - 采集自<a href="https://github.com/zmrenwu/django-blog-tutorial-templates"
+                <p class="copyright">&copy 2018 - 模板来自<a href="https://github.com/zmrenwu/django-blog-tutorial-templates"
                                                         target="_blank" >github</a>
-                    - 由<a href="http://zmrenwu.com/" title="网页模板" target="_blank">追梦人物的博客和<a href="https://e.jd.com/30371726.html" target="_blank">django by example</a></a>修改
+                    - 参考<a href="http://zmrenwu.com/" title="网页模板" target="_blank">追梦人物的博客和<a href="https://e.jd.com/30371726.html" target="_blank">django by example</a></a>
                 </p>
             </div>
         </div>

@@ -71,12 +71,12 @@ class Post(models.Model):
 
     # 这是分类与标签，分类与标签的模型我们已经定义在上面。
     # 我们在这里把文章对应的数据库表和分类、标签对应的数据库表关联了起来，但是关联形式稍微有点不同。
-    # 我们规定一篇文章只能对应一个分类，但是一个分类下可以有多篇文章，所以我们使用的是 ForeignKey，即一对多的关联关系。
-    # 而对于标签来说，一篇文章可以有多个标签，同一个标签下也可能有多篇文章，所以我们使用 ManyToManyField，表明这是多对多的关联关系。
-    # 同时我们规定文章可以没有标签，因此为标签 tags 指定了 blank=True。
-    # 如果你对 ForeignKey、ManyToManyField 不了解，请看教程中的解释，亦可参考官方文档：
-    # https://docs.djangoproject.com/en/1.10/topics/db/models/#relationships
+
+    # 一篇文章只能对应一个分类，但是一个分类下可以有多篇文章，所以我们使用的是
+    # ForeignKey，即一对多的关联关系。
     category = models.ForeignKey(Category)
+    # 1篇文章可以有多个标签，同一个标签下也可能有多篇文章，所以我们使用
+    # ManyToManyField，表明这是多对多的关联关系,文章可以没有标签
     tags = models.ManyToManyField(Tag, blank=True)
     views = models.PositiveIntegerField(default=0)
     # 文章作者，这里 User 是从 django.contrib.auth.models 导入的。
@@ -99,7 +99,6 @@ class Post(models.Model):
     def increase_views(self):
         self.views += 1
         self.save(update_fields=['views'])
-
 
 # # 储存评论
 # class Comment(models.Model):
