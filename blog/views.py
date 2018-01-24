@@ -187,3 +187,12 @@ def contact(request):
     return render(request, 'blog/contact.html', context={
         'welcome': '足下的到访使小站蓬荜生辉'
     })
+
+
+# from rest_framework import viewsets
+# from .serializer import PostSerializer
+#
+#
+# class PostViewSet(viewsets.ModelViewSet):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer

@@ -9,6 +9,14 @@ from django.utils.html import strip_tags
 # from django.core.urlresolvers import reverse
 from django.urls import reverse
 
+# api拓展
+from pygments.lexers import get_all_lexers
+from pygments.styles import get_all_styles
+
+LEXERS = [item for item in get_all_lexers() if item[1]]
+LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
+STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
+
 
 # 创建文章,标签等模型
 class Category(models.Model):

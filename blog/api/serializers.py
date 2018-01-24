@@ -20,8 +20,4 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         # post.get_absolute_url
-        fields = ('title', 'author', 'created_time')
-
-
-
-
+        fields = ('title', 'author', 'created_time', 'modified_time')

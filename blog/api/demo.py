@@ -13,7 +13,12 @@
 '''
 from blog.models import Post
 from blog.api.serializers import PostSerializer
-
-post = Post.objects.all()
+from blog.serializers import PostSerializer
+post = Post.objects.latest('pk')
 serializer = PostSerializer(Post)
+serializer = PostSerializer()
 serializer.data
+
+print(repr(serializer))
+
+

@@ -15,6 +15,8 @@ from django.conf.urls import url
 
 from . import views
 
+from rest_framework import routers
+
 # 网址和处理函数的关系
 app_name = 'blog'
 urlpatterns = [
@@ -29,4 +31,10 @@ urlpatterns = [
     url(r'^share/(?P<pk>\d+)/$', views.post_share,
         name='post_share'),
     url(r'^contact', views.contact, name='contact')
+
 ]
+# #  博客的api构建法
+# from .views import PostViewSet
+#
+# router = routers.DefaultRouter()
+# router.register(r'post', PostViewSet)
