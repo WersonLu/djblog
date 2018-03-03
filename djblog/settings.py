@@ -38,8 +38,8 @@ INSTALLED_APPS = (
     'blog',
     'haystack',
     'comments',
-    'rest_framework',
-    'account',
+    # 'rest_framework',
+    # 'account',
 )
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
